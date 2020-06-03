@@ -34,15 +34,13 @@ For topoflow_climate, the inputs, parameters, and outputs are:
 
 If you change the number of inputs, parameters or outputs. You must edit the line number 3:
 
-For example, the topoflow 
-
 ```bash
 . $BASEDIR/io.sh ${NUMBER_INPUTS} ${NUMBER_PARAMETERS} ${NUMBER_OUTPUTS} "$@"` 
 ```
 
 #### Example 
 
-In the previous example, the result is:
+In the example `topoflow_climate`, the result is:
 
 ```bash
 #!/bin/bash
@@ -54,7 +52,7 @@ set -e
 
 ### Replacing the template file.
 
-To replace the variables from the run in the configuration file, you must export the variables in run file.
+To replace the variables from the run in the Data Transformation configuration file., you must [export](http://linuxcommand.org/lc3_man_pages/exporth.html) the variables in run file.
 
 #### Example
 
@@ -74,7 +72,7 @@ export OUTPUTS1
 
 #### Editing the configuration file with the varibles. 
 
-Replace each value with the variable.
+Replace each value with the variables in the Data Transformation configuration file.
 
 **Important**: 
 Please, dont use absolute paths in the configuration file. It can be fragile to changes.
