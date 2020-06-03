@@ -1,0 +1,39 @@
+#!/bin/bash
+BASEDIR=`dirname $0`
+. $BASEDIR/io.sh 1 4 1 "$@"
+CURDIR=`pwd`
+set -e
+
+export PARAMS1
+export PARAMS2
+export PARAMS3
+export PARAMS4
+export OUTPUTS1
+
+set -xe
+
+
+#Since the datatransformation must run from the /ws directory, I get the full paths
+config_file=$(readlink -f topoflow_climate.yml)
+env_file=$(readlink -f .env)
+output=$(readlink -f $OUTPUTS1)
+
+#The input can be a file nc4 or zip file
+#io.sh extracts any zip file
+mkdir -p files
+find . -type f -name "*.nc4" -exec cp {} files \;
+
+#This command replaces the variable in the template file
+envsubst < topoflow_climate.yml.template > topoflow_climate.yml
+
+
+pushd /ws
+dotenv -f $env_file run python -m dtran.main exec_pipeline --config $config_file
+#the output file is generated in the /ws directory, we must move to /tmp
+mv $OUTPUTS1 $output 
+popd
+
+
+set -e
+cd $BASEDIR
+. $BASEDIR/output.sh

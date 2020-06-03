@@ -1,0 +1,22 @@
+version: "1"
+description: Data transformation to generate TopoFlow-ready precipitation files (RTS) from Global Precipitation Measurement (GPM) data sources
+inputs:
+  input_dir: "${PWD}/files"
+  temp_dir: "${PWD}/temp"
+  output_file: ${OUTPUTS1}
+  var_name: ${PARAMS1}
+  bounding_box: "${PARAMS2}"
+  xres_arcsecs: "${PARAMS3}"
+  yres_arcsecs: "${PARAMS4}"
+adapters:
+  tf_climate:
+    comment: My topoflow climate write adapter
+    adapter: funcs.Topoflow4ClimateWriteFunc
+    inputs:
+      input_dir: $$.input_dir
+      temp_dir: $$.temp_dir
+      output_file: $$.output_file
+      var_name: $$.var_name
+      DEM_bounds: $$.bounding_box
+      DEM_xres_arcsecs: $$.xres_arcsecs
+      DEM_yres_arcsecs: $$.yres_arcsecs
