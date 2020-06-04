@@ -1,8 +1,14 @@
+## TODO:
+
+- [ ] Create the template dir in the repository `/ws/templates/`
+- [ ] Use only dataset_id
+
 ## How to run it?
 
 ### Run the container
 
 ```bash
+$ cd topoflow_climate
 $ docker run -ti -v $PWD:/tmp -w /tmp/  --entrypoint=/bin/bash mintproject/mint_dt
 ```
 
@@ -27,7 +33,7 @@ For topoflow_climate, the inputs, parameters, and outputs are:
 
 
 ```bash
-./run -i1 demo-gpm.nc4 -p1 "precipitation" -p2 "23.995416666666, 6.532916666667, 28.020416666666, 9.566250000000" -p3 30 -p4 30 -o1 outputs1.zip
+./run -i1 demo-gpm.nc4 -p1 "topflow_climate" -p2 <data_set_id> -p3 "precipitation" -p4 "23.995416666666, 6.532916666667, 28.020416666666, 9.566250000000" -p5 30 -p6 30 -o1 outputs1.zip
 ```
 
 ### Editing the number of parameters, inputs and outputs

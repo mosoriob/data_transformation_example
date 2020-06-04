@@ -2,34 +2,33 @@
 BASEDIR=`dirname $0`
 . $BASEDIR/io.sh 1 4 1 "$@"
 CURDIR=`pwd`
-set -e
-
-export PARAMS1
-export PARAMS2
-export PARAMS3
-export PARAMS4
-export OUTPUTS1
-
 set -xe
 
+for ((i=1; i<=PNUM; i++)); do
+    export PARAMS$i
+done
 
-#Since the datatransformation must run from the /ws directory, I get the full paths
-config_file=$(readlink -f topoflow_climate.yml)
-env_file=$(readlink -f .env)
+for ((i=1; i<=ONUM; i++)); do
+    export OUTPUTS$i
+done
+
+#The params1 must be the name of the configuration: topoflow_climate
+transformation_file=${PARAMS1}
+#The params2 must be the dataset_id. If we don't use localfiles, the problem is more simple
+dataset_id=${PARAMS2}
+
+#Create a directory with the templates
+config_file_template=$(readlink -f /ws/templates/${transformation_file})
+env_file=$(readlink -f /ws/.env.docker)
 output=$(readlink -f $OUTPUTS1)
 
-#The input can be a file nc4 or zip file
-#io.sh extracts any zip file
-mkdir -p files
-find . -type f -name "*.nc4" -exec cp {} files \;
-
 #This command replaces the variable in the template file
-envsubst < topoflow_climate.yml.template > topoflow_climate.yml
-
+envsubst < ${config_file_template}.yaml > config.yml
+config_file=${readlink -f config.yml}
 
 pushd /ws
 dotenv -f $env_file run python -m dtran.main exec_pipeline --config $config_file
-#the output file is generated in the /ws directory, we must move to /tmp
+#the output file is generated in the /ws directory, we must move to
 mv $OUTPUTS1 $output 
 popd
 
